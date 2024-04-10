@@ -88,3 +88,39 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error(err);
         });
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Seleciona o campo de entrada e o botão
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+
+    // Adiciona o evento de clique ao botão
+    searchButton.addEventListener('click', function () {
+        // Obtém o valor digitado pelo usuário no campo de entrada
+        const id = searchInput.value.trim();
+
+        // Verifica se o ID não está vazio
+        if (id !== '') {
+            // Faz uma requisição GET para o endpoint do produto com o ID digitado
+            fetch(`http://localhost:3000/product/${id}`)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Erro ao buscar o produto');
+                })
+                .then((product) => {
+                    console.log(product); // Faça o que desejar com os dados do produto
+                    swal('Produto Encontrado', `Nome: ${product.name}, Autor: ${product.author}`, 'success');
+                })
+                .catch((err) => {
+                    console.error(err);
+                    swal('Erro', 'Erro ao buscar o produto', 'error');
+                });
+        } else {
+            // Se o campo de entrada estiver vazio, exibe uma mensagem de erro
+            swal('Erro', 'Por favor, digite um ID de produto válido', 'error');
+        }
+    });
+});
